@@ -1,0 +1,32 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <span>{{name}}</span>
+    </div>
+    <script src="./vue.js"></script>
+    <!-- <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.14/vue.js"></script> -->
+    <script>
+        // 1,实现diff算法
+        // 之前的更新都是生成新的虚拟节点,然后生成真实节点,并且直接替换老的节点
+        // 2,组件渲染原理
+        const vm = new Vue({
+            el: '#app',
+            data() {
+                return { name: 'zf' }
+            }
+        })
+        setTimeout(() => {
+            vm.name = 'jw'
+        }, 1000);
+    </script>
+</body>
+
+</html>

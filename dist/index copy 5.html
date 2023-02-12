@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- 可以给模板中的属性添加一个收集器 dep -->
+    <!-- 页面渲染时 将渲染逻辑封装到watcher中, vm._update(vm.render()) -->
+    <!-- 让dep记住这个watcher,数据变化时找到对应的watcher进行更新 -->
+    <!-- 多个{{name}},会有重复watcher,要避免 -->
+    <!-- 如果渲染的el里有注释,会卡死!!!! -->
+    <div id="app">
+        {{fullname}}
+        <div>
+            {{firstname}}
+        </div>
+    </div>
+    <script src="./vue.js"></script>
+    <!-- <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.14/vue.js"></script> -->
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                firstname: '俊',
+            },
+            computed: {
+                fullname() {
+                    return this.firstname + 'lastname'
+                }
+            },
+            // 写法3 
+            // methods: {
+            //     fn(newVal, oldVal) {
+            //         console.log(newVal, oldVal);
+            //     }
+            // },
+            // 写法1,直接写函数
+            watch: {
+                // firstname(newVal, oldVal) {
+                //     console.log(newVal, oldVal);
+                // }
+                // 写法2: 数组内函数依次执行
+                // firstname: [
+                //     // 'fn', // 写法3,调用method里定义的方法
+                //     (newVal, oldVal) => {
+
+                //     },
+                //     (newVal, oldVal) => {
+
+                //     }
+                // ]
+                // firstname: 'fn', // 写法3,调用method里定义的方法 
+            }
+        });
+        // 写法不同,但是底层都是$watch
+        // 写法4
+        // vm.$watch(() => vm.firstname, (newVal, oldVal) => {
+        //     // vm.$watch("firstname", (newVal, oldVal) => {
+        //     console.log(newVal, oldVal);
+        // })
+        vm.$watch(() => vm.fullname, (newVal, oldVal) => {
+            console.log(newVal, oldVal);
+        })
+        setTimeout(() => {
+            vm.firstname = '123'
+        }, 1000);
+    </script>
+</body>
+
+</html>

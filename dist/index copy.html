@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="./vue.js"></script>
+    <script>
+        // console.log(Vue);
+        // 响应式的数据变化 (数据变化可以被监控) 
+        const vm = new Vue({
+            // data: {
+            //     name: 'zs',
+            //     age: 12
+            // }
+            // vue3里data只能是函数,vue2则可以是函数和对象
+            data() {
+                return {
+                    // name: 'zs',
+                    // age: 12,
+                    // obj: {
+                    //     sex: 'boy'
+                    // },
+                    arr: ['2', 'cat', 'ant', { a: 1 }]
+                }
+            }
+        })
+        // vm.name = 'ls'
+        // // 新增值时不会转响应式
+        // vm.obj.addr = {
+        //     code: 201,
+        //     desc: '华尔街'
+        // }
+        // // 改变已有值时会转响应式
+        // vm.obj.sex = {
+        //     sex: 'boy',
+        //     age: 112
+        // }
+        // console.log(vm);
+        // console.log(vm.name);
+        // 一般操作数组很少用下标,一般是用数组提供的方法
+        vm.arr.push('bear')
+        // 数组里的对象也需要被劫持
+        vm.arr[3].a = 100
+        // 头部追加
+        vm.arr.unshift({ b: 100 })
+        // 从下标3开始,删除0,新增{c:100}
+        vm.arr.splice(3, 0, { c: 100 })
+        console.log(vm)
+    </script>
+</body>
+
+</html>

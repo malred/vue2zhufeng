@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- 可以给模板中的属性添加一个收集器 dep -->
+    <!-- 页面渲染时 将渲染逻辑封装到watcher中, vm._update(vm.render()) -->
+    <!-- 让dep记住这个watcher,数据变化时找到对应的watcher进行更新 -->
+    <!-- 多个{{name}},会有重复watcher,要避免 -->
+    <!-- 如果渲染的el里有注释,会卡死!!!! -->
+    <div id="app">
+        {{fullname}}
+    </div>
+    <script src="./vue.js"></script>
+    <!-- <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.14/vue.js"></script> -->
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                firstname: '俊',
+                lastname: '杰',
+            },
+            computed: {
+                // 简写
+                // fullname() { // defineProperty中的get方法
+                //     console.log('run');
+                //     // console.log(this); 
+                //     return this.firstname + this.lastname
+                // }
+                fullname: {
+                    // 可见,计算属性需要维护一个dirty属性
+                    // 默认计算属性不会立刻执行
+                    // 就是一个defineProperty
+                    // 如果组成计算属性的值改变(计算属性依赖的值发生改变),则会触发更新 -> 计算属性也是一个watcher
+                    get() {
+                        console.log('run'); // (如果值没发生改变)多次调用只执行一次 (脏值检测)
+                        return this.firstname + this.lastname
+                    },
+                    set(newVal) {
+                        console.log(newVal);
+                    }
+                }
+            }
+        });
+        setTimeout(() => {
+            // vm.fullname = '123'
+            vm.firstname = '123'
+        }, 1000);
+    </script>
+</body>
+
+</html>

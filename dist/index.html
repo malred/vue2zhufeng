@@ -1,0 +1,48 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script src="./vue.js"></script>
+    <!-- <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.14/vue.js"></script> -->
+    <script>
+        // 根实例
+        // 组件三大特性: 自定义标签 组件有自己的事件和属性 组件插槽
+        // 声明组件: 全局 (不管全局还是局部,内部都是调用Vue.extend)
+        Vue.component('my-button', Vue.extend({
+            // Vue解析组件的template来渲染
+            template: '<button>click-my</button>'
+        }))
+        let Sub = Vue.extend({
+            template: '<button>click<my-button></my-button></button>',
+            components: {
+                'my-button': {
+                    template: '<button>click-my-sub</button>'
+                }
+            }
+            // Vue解析组件的template来渲染
+        })
+        // console.log(new Sub());
+        new Sub().$mount('#app')
+
+        // const vm = new Vue({
+        //     el: '#app',
+        //     data() {
+        //         return { name: 'zf' }
+        //     },
+        //     component: { // 类似js原型链,局部没有才找全局
+        //         'my-button': {
+        //             template: '<button>click2</button>'
+        //         }
+        //     }
+        // }) 
+    </script>
+</body>
+
+</html>

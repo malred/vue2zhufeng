@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- 可以给模板中的属性添加一个收集器 dep -->
+    <!-- 页面渲染时 将渲染逻辑封装到watcher中, vm._update(vm.render()) -->
+    <!-- 让dep记住这个watcher,数据变化时找到对应的watcher进行更新 -->
+    <!-- 多个{{name}},会有重复watcher,要避免 -->
+    <!-- 如果渲染的el里有注释,会卡死!!!! -->
+    <div id="app" style="color:skyblue;background: yellow;" show>
+        <div key="123">
+            {{ a }}
+            <hr />
+            {{arr}}
+        </div>
+    </div>
+    <script src="./vue.js"></script>
+    <script>
+        // console.log(Vue);
+        // 响应式的数据变化 (数据变化可以被监控) 
+        // debugger
+        const vm = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    arr: [1, 2, 3, { a: 1 }, ['a', 'b']],
+                    a: { a: 1 }
+                }
+            },
+        })
+        // vm.$mount('#app')
+        // vm.arr[0] = 100 // 只重写数组方法,没有监视数组改变
+        // vm.arr.length = 100 // 没有监控数组长度变化
+        // 改变的不是arr里的值,而是改变arr对象本身,所有会更新
+        // vm.arr = [123, 456]
+        // vm.arr[3].a = 2 // a对象取值时会调用jsonstringfy进行取值,所以会更新
+        // vm.a.a = 199
+        vm.a.b = 222 // 无法直接对不存在的值更新(要用$set)
+        vm.arr.push(100, 100, 100)
+        // $set原理
+        vm.a.__ob__.dep.notify()
+        vm.arr[4].push('c')
+        vm.arr[4][1] = 'd'
+    </script>
+</body>
+
+</html>

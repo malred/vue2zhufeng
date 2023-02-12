@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- 可以给模板中的属性添加一个收集器 dep -->
+    <!-- 页面渲染时 将渲染逻辑封装到watcher中, vm._update(vm.render()) -->
+    <!-- 让dep记住这个watcher,数据变化时找到对应的watcher进行更新 -->
+    <!-- 多个{{name}},会有重复watcher,要避免 -->
+    <!-- 如果渲染的el里有注释,会卡死!!!! -->
+    <div id="app" style="color:skyblue;background: yellow;" show>
+        <div key="123">
+            {{age}} hello {{name}} world {{name}} {{name}}
+        </div>
+        world
+        <span>
+            {{age}}
+        </span>
+    </div>
+    <script src="./vue.js"></script>
+    <script>
+        // console.log(Vue);
+        // 响应式的数据变化 (数据变化可以被监控) 
+        // debugger
+        const vm = new Vue({
+            data() {
+                return {
+                    name: 'zs',
+                    age: 12,
+                    // obj: {
+                    //     sex: 'boy'
+                    // },
+                    arr: ['2', 'cat', 'ant', { a: 1 }]
+                }
+            },
+            // template: '<div>hello</div>'
+            // el: '#app', // 将数据解析到el上
+            // render(){
+            // return createElement('div',{})
+            // }
+        })
+        vm.$mount('#app')
+        // 实现解析表达式的方案
+        // 1,模板引擎 -> 性能差,需要正则匹配替换 vue1.0 -> 没有引入虚拟dom
+        // 2,采用虚拟dom -> 数据变化后,比较虚拟dom的差异,最后更新需要更新的地方
+        // 3,核心就是将模板变成js语法,通过js语法生成虚拟dom
+
+        // 涉及语法转换,如 es6->es5 css压缩
+        // 需要先变成语法树再重新组装代码,将template语法转换成render函数
+        // setTimeout(() => {
+        //     // 多次更新
+        //     vm.name = 'ls1'
+        //     vm.name = 'ls2'
+        //     vm.name = 'ls3'
+        //     vm.name = 'ls4'
+        //     vm.name = 'ls5'
+        //     // vm.age = 23
+        //     // 手动重新渲染
+        //     // vm._update(vm._render())
+        //     // vm.arr[0] = 0 // 页面没用到的更新了也不会触发观察者
+        // }, 1000);
+        vm.name = 'jw' // 不会立即重新渲染页面
+        // 同步获取,拿不到最新的
+        // console.log(app.innerHTML);
+        // setTimeout(() => {
+        //     // 可以拿到最新的
+        //     console.log(app.innerHTML);
+        // }, 1000);
+        // // promise优先级大于定时器,拿到的还是老的
+        // Promise.resolve().then(() => {
+        //     console.log(app.innerHTML);
+        // })
+        // 解决方案: 使用统一暴露给外部的更新方法
+        // nextTick不是创建异步任务,而是将任务维护到队列
+        vm.$nextTick(() => {
+            console.log(app.innerHTML);
+        })
+        // vm.name = 'jw2' // 放在后面更新,前面拿到的应该还是老数据
+    </script>
+</body>
+
+</html>
